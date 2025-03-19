@@ -22,6 +22,9 @@ RUN pip install --no-cache-dir Flask opencv-python numpy==1.26.4 mediapipe pygam
 # Install all remaining dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install Gunicorn
+RUN pip install gunicorn
+
 # Copy the rest of the project files
 COPY . .
 
@@ -31,5 +34,5 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6
 # Expose the Flask port
 EXPOSE 5001
 
-# Use JSON format for CMD to avoid issues
-CMD ["python3", "-u", "app.py"]
+# Use Gunicorn to run the Flask app
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5001"]
